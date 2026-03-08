@@ -1,0 +1,66 @@
+ // You are using Java
+import java.util.*;
+class TreeNode{
+    int val;
+    TreeNode left,right;
+    
+    TreeNode(int x){
+        val=x;
+    }
+}
+
+class Main{
+    public static TreeNode buildTree(String[] arr){
+        if(arr.length==0||arr[0].equals("null"))return null;
+        
+        TreeNode root=new TreeNode(Integer.parseInt(arr[0]));
+        Queue<TreeNode>q=new LinkedList<>();
+        q.add(root);
+        
+        int i=1;
+        while(!q.isEmpty()&&i<arr.length){
+            TreeNode curr=q.poll();
+            if(i<arr.length && !arr[i].equals("null") ){
+                curr.left=new TreeNode(Integer.parseInt(arr[i]));
+                q.add(curr.left);
+            }
+            i++;
+               if(i<arr.length && !arr[i].equals("null") ){
+                curr.right=new TreeNode(Integer.parseInt(arr[i]));
+                q.add(curr.right);
+            }
+            i++;
+        }
+        return root;
+    }
+                static int maxpathsum=Integer.MIN_VALUE;
+
+            public static int PathSumHelper(TreeNode root){
+            if(root==null)return 0;
+            int left=PathSumHelper(root.left);
+            int right=PathSumHelper(root.right);
+            int AllNode=root.val+left+right;
+            
+            int oneside=Math.max(root.val,root.val+left);
+            int oneofanotherside=Math.max(root.val,root.val+right);
+            int bothmax=Math.max(oneside,oneofanotherside);
+            int overall=Math.max(bothmax,AllNode);
+            maxpathsum=Math.max(overall,maxpathsum);
+            
+            return bothmax;
+        }
+        public static int Pathsum(TreeNode root){
+            PathSumHelper(root);
+            return maxpathsum;
+    
+    }
+        public static void main(String[] args){
+            Scanner s=new Scanner(System.in);
+            int n=s.nextInt();
+            s.nextLine();
+            String root[]=s.nextLine().split(" ");
+            TreeNode root1=buildTree(root);
+            System.out.print(Pathsum(root1));
+        
+    }
+}
