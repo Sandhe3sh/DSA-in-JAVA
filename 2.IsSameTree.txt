@@ -1,0 +1,61 @@
+ import java.util.*;
+ class TreeNode{
+     int val;
+     TreeNode left,right;
+     
+     TreeNode(int x){
+     val=x;    
+     }
+ }
+ 
+ class Main{
+     public static TreeNode buildTree(String arr[]){
+         if(arr.length==0||arr.equals("null"))return null;
+         
+         TreeNode root=new TreeNode(Integer.parseInt(arr[0]));
+         Queue<TreeNode>q=new LinkedList<>();
+         q.add(root);
+         
+        int i=1;
+         while(!q.isEmpty()&&i<arr.length){
+            TreeNode current= q.poll();
+            if(i<arr.length&&!arr[i].equals("null")){
+                current.left=new TreeNode(Integer.parseInt(arr[i]));
+                q.add(current.left);
+                }
+                i++;
+                 if(i<arr.length&&!arr[i].equals("null")){
+                current.right=new TreeNode(Integer.parseInt(arr[i]));
+                q.add(current.right);
+                }
+                i++;
+         }
+         return root;
+     }
+     
+     
+     public static boolean isSameTree(TreeNode p,TreeNode q){
+         if(p==null&&q==null)return true;
+         if(p==null||q==null)return false;
+         else if(p.val==q.val){
+           return  isSameTree(p.left,q.left)&&isSameTree(p.right,q.right);
+         }
+         return false;
+         
+     }
+     
+     public static void main(String[] args){
+         Scanner s=new Scanner(System.in);
+         int n=s.nextInt();
+         s.nextLine();
+         String p[]=s.nextLine().split(" ");
+         
+         TreeNode rootp=buildTree(p);
+         int m=s.nextInt();
+         s.nextLine();
+         String q[]=s.nextLine().split(" ");
+         TreeNode rootq=buildTree(q);
+         boolean res=isSameTree(rootp,rootq);
+         System.out.print(res);
+     }
+ }
