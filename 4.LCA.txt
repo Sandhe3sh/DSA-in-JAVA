@@ -1,0 +1,72 @@
+ import java.util.*;
+ class TreeNode{
+     int val;
+     TreeNode left,right;
+     
+     TreeNode(int x){
+         val=x;
+     }
+ }
+ 
+ class Main{
+     public static TreeNode buildTree(String[] arr){
+         if(arr.length==0||arr[0].equals("null"))return null;
+         
+         TreeNode root=new TreeNode(Integer.parseInt(arr[0]));
+         Queue<TreeNode>q=new LinkedList<>();
+         q.add(root);
+         int i=1;
+         
+         while(!q.isEmpty()&&i<arr.length){
+             TreeNode curr=q.poll();
+             if(i<arr.length&&!arr[i].equals("null")){
+                 curr.left=new TreeNode(Integer.parseInt(arr[i]));
+                 q.add(curr.left);
+             }
+             i++;
+             if(i<arr.length&&!arr[i].equals("null")){
+                 curr.right=new TreeNode(Integer.parseInt(arr[i]));
+                 q.add(curr.right);
+             }
+             i++;
+         }
+         return root;
+     }
+     
+     public static TreeNode LCA(TreeNode root,TreeNode p,TreeNode q){
+         if(root==null)return null;
+         if(p.val<root.val&&q.val<root.val){
+             return LCA(root.left,p,q);
+         }
+         if(p.val>root.val&q.val>root.val){
+             return LCA(root.right,p,q);
+         }
+         return root;
+     }
+     
+     public static TreeNode find(TreeNode root,int val){
+         if(root==null)return null;
+         if(root.val==val)return root;
+         TreeNode left=find(root.left,val);
+         TreeNode right=find(root.right,val);
+         if(left!=null){
+             return left;
+         }
+         else{
+             return right;
+         }
+     }
+     public static void main(String[] args){
+         Scanner s=new Scanner(System.in);
+         int n=s.nextInt();
+         s.nextLine();
+         String arr[]=s.nextLine().split(" ");
+         TreeNode root=buildTree(arr);
+         int p=s.nextInt();
+         int q=s.nextInt();
+         TreeNode findp=find(root,p);
+         TreeNode findq=find(root,q);
+         System.out.print(LCA(root,findp,findq).val);
+     }
+ }
+ 
