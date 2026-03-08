@@ -1,0 +1,59 @@
+ import java.util.*;
+ class TreeNode{
+     int val;
+     TreeNode left,right;
+     
+     TreeNode(int x){
+         val=x;
+     }
+ }
+ 
+ class Main{
+     public static TreeNode buildTree(String[] arr){
+         if(arr.length==0||arr[0].equals("null"))return null;
+         
+         TreeNode root=new TreeNode(Integer.parseInt(arr[0]));
+         Queue<TreeNode>q=new LinkedList<>();
+         q.add(root);
+         int i=1;
+         
+         while(!q.isEmpty()&&i<arr.length){
+             TreeNode curr=q.poll();
+             if(i<arr.length&&!arr[i].equals("null")){
+                 curr.left=new TreeNode(Integer.parseInt(arr[i]));
+                 q.add(curr.left);
+             }
+             i++;
+             if(i<arr.length&&!arr[i].equals("null")){
+                 curr.right=new TreeNode(Integer.parseInt(arr[i]));
+                 q.add(curr.right);
+             }
+             i++;
+         }
+         return root;
+     }
+     
+   
+     public static boolean CheckSubTree(TreeNode root){
+         return CheckSubTreeHelper(root.left,Long.MIN_VALUE,root.val)&&CheckSubTreeHelper(root.right,root.val,Long.MAX_VALUE);
+     }
+     public static boolean CheckSubTreeHelper(TreeNode root,long min,long max){
+         if(root==null)return true;
+         if(root.val<=min||root.val>max)return false;
+         return CheckSubTreeHelper(root.left,min,root.val)&&CheckSubTreeHelper(root.right,root.val,max);
+         
+     
+    
+     }
+     public static void main(String[] args){
+         Scanner s=new Scanner(System.in);
+         int n=s.nextInt();
+         s.nextLine();
+         String arr[]=s.nextLine().split(" ");
+         TreeNode root=buildTree(arr);
+         boolean res=CheckSubTree(root);
+        
+         System.out.print(res );
+     }
+ }
+ 
