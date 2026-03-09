@@ -1,0 +1,80 @@
+import java.util.*;
+
+class TreeNode {
+    int val;
+    TreeNode left, right;
+
+    TreeNode(int x) {
+        val = x;
+    }
+}
+
+class Main {
+
+    static int count = 0;
+    static int res = 0;
+
+    public static int kthSmallest(TreeNode root, int k) {
+        inorder(root, k);
+        return res;
+    }
+
+    public static void inorder(TreeNode root, int k) {
+        if (root == null) return;
+
+        inorder(root.left, k);
+
+        count++;
+        if (count == k) {
+            res = root.val;
+            return;
+        }
+
+        inorder(root.right, k);
+    }
+
+    public static TreeNode buildTree(String arr[]) {
+        if (arr.length == 0 || arr[0].equals("null")) return null;
+
+        TreeNode root = new TreeNode(Integer.parseInt(arr[0]));
+        Queue<TreeNode> q = new LinkedList<>();
+        q.add(root);
+
+        int i = 1;
+
+        while (!q.isEmpty() && i < arr.length) {
+            TreeNode current = q.poll();
+
+            if (i < arr.length && !arr[i].equals("null")) {
+                current.left = new TreeNode(Integer.parseInt(arr[i]));
+                q.add(current.left);
+            }
+            i++;
+
+            if (i < arr.length && !arr[i].equals("null")) {
+                current.right = new TreeNode(Integer.parseInt(arr[i]));
+                q.add(current.right);
+            }
+            i++;
+        }
+
+        return root;
+    }
+
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+
+        int n = s.nextInt();
+        s.nextLine();
+
+        String arr[] = s.nextLine().split(" ");
+
+        TreeNode root = buildTree(arr);
+
+        int k = s.nextInt();
+
+        int result = kthSmallest(root, k);
+
+        System.out.println(result);
+    }
+}
