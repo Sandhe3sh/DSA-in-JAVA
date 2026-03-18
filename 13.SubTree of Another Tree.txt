@@ -1,0 +1,81 @@
+// You are using Java
+import java.util.*;
+
+class TreeNode {
+    int val;
+    TreeNode left, right;
+
+    TreeNode(int x) {
+        val = x;
+        left = right = null;
+    }
+}
+
+class Main {
+
+    // Build tree from level order input
+    public static TreeNode buildTree(String arr[]) {
+        if (arr.length == 0 || arr[0].equals("null")) return null;
+
+        TreeNode root = new TreeNode(Integer.parseInt(arr[0]));
+        Queue<TreeNode> q = new LinkedList<>();
+        q.add(root);
+
+        int i = 1;
+
+        while (!q.isEmpty() && i < arr.length) {
+            TreeNode current = q.poll();
+
+            // Left child
+            if (i < arr.length && !arr[i].equals("null")) {
+                current.left = new TreeNode(Integer.parseInt(arr[i]));
+                q.add(current.left);
+            }
+            i++;
+
+            // Right child
+            if (i < arr.length && !arr[i].equals("null")) {
+                current.right = new TreeNode(Integer.parseInt(arr[i]));
+                q.add(current.right);
+            }
+            i++;
+        }
+
+        return root;
+    }
+
+    // Range Sum in BST (Optimized)
+    public static boolean isSubtree(TreeNode root, TreeNode subRoot) {
+        if(root==null)return false;
+        if(isSameTree(root,subRoot)){
+            return true;
+        }
+        return isSubtree(root.left,subRoot)||isSubtree(root.right,subRoot);
+    }
+    public static boolean isSameTree(TreeNode p,TreeNode q){
+        if(p==null&&q==null)return true;
+        if(p==null||q==null)return false;
+        if(p.val==q.val){
+            return isSameTree(p.left,q.left)&&isSameTree(p.right,q.right);
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+
+        // Input Tree
+        int n = s.nextInt();
+        s.nextLine();
+        String arr1[] = s.nextLine().split(" ");
+        TreeNode root1 = buildTree(arr1);
+        int m=s.nextInt();
+        s.nextLine();
+        String arr2[] = s.nextLine().split(" ");
+        TreeNode root2 = buildTree(arr2);
+        boolean res=isSubtree(root1,root2);
+        
+    
+        System.out.print(res);
+    }
+}
